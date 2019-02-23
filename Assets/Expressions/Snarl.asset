@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eb185102af884175b7c40432d66ce6f, type: 3}
+  m_Name: Snarl
+  m_EditorClassIdentifier: 
+  ExpresionName: Snarl
+  BlendShapeRanges:
+  - BlendShape: 3
+    LowBound: 0
+    UpperBound: 0.03
+  - BlendShape: 50
+    LowBound: 0.8
+    UpperBound: 1
+  - BlendShape: 51
+    LowBound: 0.8
+    UpperBound: 1
+  - BlendShape: 48
+    LowBound: 0.4
+    UpperBound: 1
+  - BlendShape: 49
+    LowBound: 0.4
+    UpperBound: 1
+  - BlendShape: 34
+    LowBound: 0.4
+    UpperBound: 1
+  - BlendShape: 35
+    LowBound: 0.4
+    UpperBound: 1
