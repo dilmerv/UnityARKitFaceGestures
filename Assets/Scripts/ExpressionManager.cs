@@ -32,6 +32,10 @@ public class ExpressionManager : MonoBehaviour
     private GameObject headPrefab;
     private GameObject headGameObject;
 
+    [SerializeField]
+    private MeshFilter meshFilter;
+    private Mesh faceMesh;
+
     #endregion
     void Start()
     {
@@ -42,7 +46,7 @@ public class ExpressionManager : MonoBehaviour
 		config.alignment = UnityARAlignment.UnityARAlignmentGravity;
 		config.enableLightEstimation = true;
 
-		if (config.IsSupported )
+		if (config.IsSupported)
 		{
 			m_session.RunWithConfig (config);
 			UnityARSessionNativeInterface.ARFaceAnchorAddedEvent += FaceAdded;
@@ -103,18 +107,38 @@ public class ExpressionManager : MonoBehaviour
     {
         currentBlendShapes = anchorData.blendShapes;
         blendShapesEnabled = true;
+        faceMesh = new Mesh ();
+        UpdateMesh(anchorData);
+        meshFilter.mesh = faceMesh;
         UpdatePositionAndRotation(anchorData);
     }
 
     void FaceUpdated (ARFaceAnchor anchorData) 
     {
         currentBlendShapes = anchorData.blendShapes;
+        UpdateMesh(anchorData);
         UpdatePositionAndRotation(anchorData);
     }
 
-	void FaceRemoved (ARFaceAnchor anchorData) 
+    private void UpdateMesh(ARFaceAnchor anchorData)
+    {
+        if(faceMesh != null)
+        {
+            gameObject.transform.localPosition = UnityARMatrixOps.GetPosition (anchorData.transform);
+			gameObject.transform.localRotation = UnityARMatrixOps.GetRotation (anchorData.transform);
+            faceMesh.vertices = anchorData.faceGeometry.vertices;
+            faceMesh.uv = anchorData.faceGeometry.textureCoordinates;
+            faceMesh.triangles = anchorData.faceGeometry.triangleIndices;
+            faceMesh.RecalculateBounds();
+            faceMesh.RecalculateNormals();
+        }
+    }
+
+    void FaceRemoved (ARFaceAnchor anchorData) 
     {
         blendShapesEnabled = false;
+        meshFilter.mesh = null;
+		faceMesh = null;
     }
 
     private void UpdatePositionAndRotation(ARFaceAnchor anchorData)
