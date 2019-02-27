@@ -8,6 +8,14 @@ public class BlendShapeRange {
     public float LowBound = 0;
     public float UpperBound = 0;
     public int DetectionCount = 0;
+    public ActionExecutor Action;
+}
+
+[Serializable]
+public class ActionExecutor 
+{
+    public string MethodName;
+    public float Delay;
 }
 
 [Serializable]

@@ -9,4 +9,7 @@ public class ExpressionConfiguration : ScriptableObject
 
     [SerializeField]
     public BlendShapeRange[] BlendShapeRanges;
+
+    [SerializeField]
+    public ActionExecutor Action;
 }

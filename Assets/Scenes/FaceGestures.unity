@@ -429,7 +429,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ExpresionConfigurations:
-  - {fileID: 11400000, guid: bb89322c69b9f4ad08e3e166a8efcb9a, type: 2}
+  - {fileID: 11400000, guid: 6f295dc0011c849dfba75d051f20feba, type: 2}
   FORMAT_DEBUG_TEXT: ({0}){1}(min={2} max={3}) -> val={4}
   expressionIndicator: {fileID: 535296711}
   delayFor: 1

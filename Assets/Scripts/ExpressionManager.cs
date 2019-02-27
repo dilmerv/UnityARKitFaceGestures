@@ -27,6 +27,7 @@ public class ExpressionManager : MonoBehaviour
     [SerializeField]
     private GameObject eyePrefab;
     private GameObject eyeLeft, eyeRight;
+    private bool toggleEyeColor = false;
 
     [SerializeField]
     private GameObject headPrefab;
@@ -35,7 +36,7 @@ public class ExpressionManager : MonoBehaviour
     [SerializeField]
     private MeshFilter meshFilter;
     private Mesh faceMesh;
-
+    
     #endregion
     void Start()
     {
@@ -179,7 +180,6 @@ public class ExpressionManager : MonoBehaviour
     {
         foreach (var configuration in ExpresionConfigurations)
         {
-            bool expressionCaptured = false;
             foreach (var range in configuration.BlendShapeRanges)
             {
                 string blendshapeName = range.BlendShape.ToString();
@@ -193,22 +193,37 @@ public class ExpressionManager : MonoBehaviour
                     float newUpper = range.UpperBound <= range.LowBound ? range.LowBound : range.UpperBound;
                     currentBlendshapeText.text = string.Format(FORMAT_DEBUG_TEXT, range.DetectionCount, range.BlendShape, newLower, newUpper, currentBlendshapeValue.ToString());
                     if(currentBlendshapeValue >= newLower && currentBlendshapeValue <= newUpper){
-                        expressionCaptured = true;
                         currentBlendshapeText.color = Color.red;
                         range.DetectionCount += 1;
+
+                        if(range.Action != null && !string.IsNullOrEmpty(range.Action.MethodName)){
+                            Invoke(range.Action.MethodName, range.Action.Delay);
+                        }
                     }
                     else
                         currentBlendshapeText.color = Color.white;
                 }
-                else
-                    expressionCaptured = false;
             }
-            expressionIndicator.SetActive(AreAllSet());
+            expressionIndicator.SetActive(AreAllSet(configuration));
         }
     }
 
-    private bool AreAllSet()
+    private bool AreAllSet(ExpressionConfiguration configuration)
     {
-        return currentBlendShapeUIs.Values.Where(v => v.color == Color.red).Count() == currentBlendShapeUIs.Keys.Count();
+        bool areAllSet = currentBlendShapeUIs.Values.Where(v => v.color == Color.red).Count() == currentBlendShapeUIs.Keys.Count();
+        if(configuration.Action != null && !string.IsNullOrEmpty(configuration.Action.MethodName)){
+            Invoke(configuration.Action.MethodName, configuration.Action.Delay);
+        }
+        return areAllSet;
+    }
+
+    public void ChangeEyeColor()
+    {
+        toggleEyeColor = !toggleEyeColor;
+        MeshRenderer eyeLeftMeshRenderer = eyeLeft.GetComponent<MeshRenderer>();
+        MeshRenderer eyeRightMeshRenderer = eyeRight.GetComponent<MeshRenderer>();
+
+        eyeLeftMeshRenderer.material.color = toggleEyeColor ? Color.black : Color.yellow;
+        eyeRightMeshRenderer.material.color = toggleEyeColor ? Color.black : Color.yellow;
     }
 }
