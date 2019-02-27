@@ -24,6 +24,14 @@ public class ExpressionManager : MonoBehaviour
     public float delayFor = 1.0f;
     private float delayTimer = 0;
 
+    [SerializeField]
+    private GameObject eyePrefab;
+    private GameObject eyeLeft, eyeRight;
+
+    [SerializeField]
+    private GameObject headPrefab;
+    private GameObject headGameObject;
+
     #endregion
     void Start()
     {
@@ -49,7 +57,15 @@ public class ExpressionManager : MonoBehaviour
 
         CreateDebugOverlays();    
 
-        CleanUp();    
+        CleanUp();  
+
+        if(headPrefab != null){
+            headGameObject = Instantiate(headPrefab) as GameObject;
+        }
+        if(eyePrefab != null){
+            eyeLeft = Instantiate(eyePrefab) as GameObject;
+            eyeRight = Instantiate(eyePrefab) as GameObject;
+        }
     }
 
     void CleanUp()
@@ -84,19 +100,39 @@ public class ExpressionManager : MonoBehaviour
     }
 
     void FaceAdded (ARFaceAnchor anchorData)
-	{		
-		currentBlendShapes = anchorData.blendShapes;
-        blendShapesEnabled = true;
-	}
-
-	void FaceUpdated (ARFaceAnchor anchorData) 
     {
         currentBlendShapes = anchorData.blendShapes;
+        blendShapesEnabled = true;
+        UpdatePositionAndRotation(anchorData);
+    }
+
+    void FaceUpdated (ARFaceAnchor anchorData) 
+    {
+        currentBlendShapes = anchorData.blendShapes;
+        UpdatePositionAndRotation(anchorData);
     }
 
 	void FaceRemoved (ARFaceAnchor anchorData) 
     {
         blendShapesEnabled = false;
+    }
+
+    private void UpdatePositionAndRotation(ARFaceAnchor anchorData)
+    {
+        if(headPrefab != null){
+            // head position and rotation
+            headGameObject.transform.position = UnityARMatrixOps.GetPosition(anchorData.transform);
+            headGameObject.transform.rotation = UnityARMatrixOps.GetRotation(anchorData.transform);
+        }
+
+        if(eyePrefab != null){
+            // eyes position and rotation
+            eyeLeft.transform.position = anchorData.leftEyePose.position;
+            eyeLeft.transform.rotation = anchorData.leftEyePose.rotation;
+
+            eyeRight.transform.position = anchorData.rightEyePose.position;
+            eyeRight.transform.rotation = anchorData.rightEyePose.rotation;
+        }
     }
 
     void Update()

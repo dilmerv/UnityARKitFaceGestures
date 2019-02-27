@@ -431,6 +431,10 @@ MonoBehaviour:
   FORMAT_DEBUG_TEXT: ({0}){1}(min={2} max={3}) -> val={4}
   expressionIndicator: {fileID: 535296711}
   delayFor: 1
+  eyePrefab: {fileID: 7564079270387348586, guid: 99a3d7b224573497084b9c3175aba09f,
+    type: 3}
+  headPrefab: {fileID: 7832450497385044573, guid: 62a95fc4089294ed0a6aac85f4053641,
+    type: 3}
 --- !u!1 &1054798373
 GameObject:
   m_ObjectHideFlags: 0
